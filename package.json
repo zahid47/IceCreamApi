@@ -1,0 +1,31 @@
+{
+  "name": "IceCreamAPI",
+  "version": "0.0.1",
+  "description": "ice cream api",
+  "main": "server.tsx",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zahid47/IceCreamApi.git"
+  },
+  "keywords": [],
+  "author": "zahid <epiczahid@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zahid47/IceCreamApi/issues"
+  },
+  "homepage": "https://github.com/zahid47/IceCreamApi#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "mongoose": "^6.3.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.32",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.4"
+  }
+}
