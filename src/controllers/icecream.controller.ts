@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import Icecream from "../model/icecream.model";
-import { icecreamType } from "../types/icecreamType";
 
 export const getIcecreamsHandler = async (req: Request, res: Response) => {
+  const limit = (req.query.limit as unknown as number) || 0;
+
   try {
-    const icecreams = await Icecream.find();
+    const icecreams = await Icecream.find().limit(limit);
     res.status(200).json(icecreams);
   } catch (err) {
     res.status(500).json(err);
@@ -76,6 +77,68 @@ export const deleteIcecreamHandler = async (req: Request, res: Response) => {
     if (!icecream) return res.status(404).json({ error: "icecream not found" });
 
     res.sendStatus(200);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const searchIcecreamHandler = async (req: any, res: Response) => {
+  const limit = (req.query.limit as unknown as number) || 0;
+
+  const searchTerm: string = req.query.query || req.query.q;
+  const brand: string = req.query.brand?.toLowerCase();
+
+  let minRating = req.query.minRating;
+  if (minRating) minRating = parseFloat(minRating);
+
+  let maxRating = req.query.maxRating;
+  if (maxRating) maxRating = parseFloat(maxRating);
+
+  let ingredients: string[] = req.query.ingredients?.split(",");
+  ingredients = ingredients?.map((ingredient) => {
+    return ingredient.toUpperCase();
+  });
+
+  //building the query
+  let query: any = {};
+
+  if (brand) {
+    query = {
+      ...query,
+      brand: brand,
+    };
+  }
+
+  if (ingredients?.length > 0) {
+    query = {
+      ...query,
+      ingredients: { $all: ingredients },
+    };
+  }
+
+  if (minRating || maxRating) {
+    query = {
+      ...query,
+      rating: { $gte: minRating || 0, $lte: maxRating || 5 },
+    };
+  }
+
+  if (searchTerm) {
+    query = {
+      ...query,
+      $or: [
+        { name: { $regex: searchTerm, $options: "ie" } },
+        { subhead: { $regex: searchTerm, $options: "ie" } },
+        { description: { $regex: searchTerm, $options: "ie" } },
+      ],
+    };
+  }
+
+  // res.json(query);
+
+  try {
+    const icecream = await Icecream.find(query).limit(limit);
+    res.status(200).json(icecream);
   } catch (err) {
     res.status(500).json(err);
   }
