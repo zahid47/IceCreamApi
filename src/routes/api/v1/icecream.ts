@@ -6,9 +6,17 @@ import {
   getIcecreamHandler,
   updateIcecreamHandler,
   deleteIcecreamHandler,
+  searchIcecreamHandler,
 } from "../../../controllers/icecream.controller";
 
 const router = Router();
+
+// @route  GET api/v1/icecreams/search
+// @desc   get icecream by search
+// @access public
+router.get("/search", (req: Request, res: Response) => {
+  searchIcecreamHandler(req, res);
+});
 
 // @route  GET api/v1/icecreams
 // @desc   get all icecreams
@@ -21,7 +29,8 @@ router.get("/", (req: Request, res: Response) => {
 // @desc   create icecream
 // @access public
 router.post("/", (req: Request, res: Response) => {
-  createIcecreamHandler(req, res);
+  // createIcecreamHandler(req, res);
+  res.sendStatus(401);
 });
 
 // @route  GET api/v1/icecreams/index
@@ -35,14 +44,16 @@ router.get("/:index", (req: Request, res: Response) => {
 // @desc   update icecream by index
 // @access public
 router.put("/:index", (req: Request, res: Response) => {
-  updateIcecreamHandler(req, res);
+  // updateIcecreamHandler(req, res);
+  res.sendStatus(401);
 });
 
 // @route  DELETE api/v1/icecreams/index
 // @desc   get icecream by index
 // @access public
 router.delete("/:index", (req: Request, res: Response) => {
-  deleteIcecreamHandler(req, res);
+  // deleteIcecreamHandler(req, res);
+  res.sendStatus(401);
 });
 
 export default router;
