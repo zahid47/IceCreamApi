@@ -26,5 +26,4 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-      - run: npm build --if-present
       - run: npm test
