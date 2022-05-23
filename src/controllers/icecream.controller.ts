@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Icecream from "../model/icecream.model";
 
 export const getIcecreamsHandler = async (req: Request, res: Response) => {
-  const limit = req.query["limit"] as unknown as number || 0;
+  const limit = (req.query["limit"] as unknown as number) || 0;
 
   try {
     const icecreams = await Icecream.find().limit(limit);
@@ -100,7 +100,7 @@ export const searchIcecreamHandler = async (req: any, res: Response) => {
   });
 
   //building the query
-  let query: any = {};
+  let query = {};
 
   if (brand) {
     query = {
