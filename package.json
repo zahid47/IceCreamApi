@@ -1,5 +1,5 @@
 {
-  "name": "IceCreamAPI",
+  "name": "ice-cream-api",
   "version": "0.0.1",
   "description": "ice cream api",
   "main": "server.tsx",
