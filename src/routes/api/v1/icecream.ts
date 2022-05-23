@@ -29,8 +29,7 @@ router.get("/", (req: Request, res: Response) => {
 // @desc   create icecream
 // @access public
 router.post("/", (req: Request, res: Response) => {
-  // createIcecreamHandler(req, res);
-  res.sendStatus(401);
+  createIcecreamHandler(req, res);
 });
 
 // @route  GET api/v1/icecreams/index
@@ -44,16 +43,14 @@ router.get("/:index", (req: Request, res: Response) => {
 // @desc   update icecream by index
 // @access public
 router.put("/:index", (req: Request, res: Response) => {
-  // updateIcecreamHandler(req, res);
-  res.sendStatus(401);
+  updateIcecreamHandler(req, res);
 });
 
 // @route  DELETE api/v1/icecreams/index
 // @desc   get icecream by index
 // @access public
 router.delete("/:index", (req: Request, res: Response) => {
-  // deleteIcecreamHandler(req, res);
-  res.sendStatus(401);
+  deleteIcecreamHandler(req, res);
 });
 
 export default router;
