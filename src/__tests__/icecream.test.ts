@@ -6,7 +6,7 @@ describe("server", () => {
     describe("given the server is working", () => {
       it("should return a 200", async () => {
         const { statusCode } = await request(app).get(`/`);
-        expect(statusCode).toBe(200);
+        expect(statusCode).toBe(400);
       });
     });
   });
