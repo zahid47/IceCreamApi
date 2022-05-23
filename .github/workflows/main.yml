@@ -26,4 +26,5 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
+        with: npm@5
       - run: npm test
