@@ -5,7 +5,8 @@
   "main": "server.tsx",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "test": "jest --watchAll"
+    "testDev": "jest --watchAll",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
