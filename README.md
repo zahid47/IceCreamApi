@@ -1,5 +1,7 @@
 # Ice Cream API
 
+[![CI](https://github.com/zahid47/IceCreamApi/actions/workflows/intregation.yml/badge.svg?branch=master)](https://github.com/zahid47/IceCreamApi/actions/workflows/intregation.yml)
+
 ### TO-DO
 - ~~search using name~~
 - ~~limit~~, use pagination, include prev attribute
