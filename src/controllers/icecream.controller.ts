@@ -25,7 +25,11 @@ export const getIcecreamsHandler = async (
   req: Request<{}, {}, {}, getIcecreamsInput["query"]>,
   res: Response
 ) => {
-  const limit = parseInt(req.query.limit!) || 0;
+  
+  let limit = 0;
+  if (req.query.limit) {
+    limit = parseInt(req.query.limit);
+  }
 
   try {
     const icecreams = await getIcecreams(limit);

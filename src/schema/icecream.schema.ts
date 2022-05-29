@@ -1,4 +1,4 @@
-import { object, string, TypeOf, array, any } from "zod";
+import { object, string, TypeOf, any } from "zod";
 
 export const createIcecreamSchema = object({
   body: object({
