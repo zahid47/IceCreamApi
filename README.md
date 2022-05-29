@@ -8,7 +8,6 @@
 - ~~query params: ?brand, ?rating, ?ingredients ?name~~, add regex to ingredients search?
 - ~~create index from all the search types~~, create compound index for $or: [name, subhead, desc]
 - ~~refactor~~
-- redis
 - testing
 - write docs w swagger
 
