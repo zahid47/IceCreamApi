@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import icecreams from "../routes/api/v1/icecream";
 import dotenv from "dotenv";
 import path from "path";
+import { version } from "../../package.json";
 
 const app: Express = express();
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
@@ -13,7 +14,7 @@ app.use(bodyParser.json());
 app.get("/", (_req: Request, res: Response) => {
   return res.status(200).json({
     name: "Ice Cream API",
-    version: process.env.VERSION,
+    version,
     date: new Date().toDateString(),
   });
 });
