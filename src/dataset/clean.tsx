@@ -1,6 +1,6 @@
-import { icecreamType } from "../types/icecreamType";
+import icecreamType from "../types/icecreamType";
 
-const icecreams: icecreamType[] = [
+export const icecreams: icecreamType[] = [
   {
     index: 0,
     brand: "bj",

@@ -1,23 +1,45 @@
 import { Request, Response } from "express";
 import Icecream from "../model/icecream.model";
+import {
+  createIcecreamInput,
+  deleteIcecreamInput,
+  getIcecreamInput,
+  getIcecreamsInput,
+  searchIcecreamInput,
+  updateIcecreamInput,
+} from "../schema/icecream.schema";
+import {
+  createIcecream,
+  deleteIcecream,
+  getIcecreamByIndex,
+  getIcecreams,
+  searchIcecream,
+  updateIcecream,
+} from "../service/icecream.service";
+import icecreamType from "../types/icecreamType";
+import bodySerializer from "../utils/bodySerializer";
+import logger from "../utils/logger";
+import { searchQueryBuilder } from "../utils/searchQueryBuilder";
 
-export const getIcecreamsHandler = async (req: Request, res: Response) => {
-  const limit = (req.query["limit"] as unknown as number) || 0;
+export const getIcecreamsHandler = async (
+  req: Request<{}, {}, {}, getIcecreamsInput["query"]>,
+  res: Response
+) => {
+  const limit = parseInt(req.query.limit!) || 0;
 
   try {
-    const icecreams = await Icecream.find().limit(limit);
-    res.status(200).json(icecreams);
+    const icecreams = await getIcecreams(limit);
+    return res.status(200).json(icecreams);
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 };
 
-export const createIcecreamHandler = async (req: Request, res: Response) => {
-  const data = req.body;
-
-  if (!data.name) return res.status(400).json({ error: "no name provided" });
-
-  const newIcecream = new Icecream(data);
+export const createIcecreamHandler = async (
+  req: Request<{}, {}, createIcecreamInput["body"]>,
+  res: Response
+) => {
+  const newIcecream: icecreamType = bodySerializer(req.body);
 
   try {
     const previousIcecream = await Icecream.find().sort({ _id: -1 }).limit(1);
@@ -27,119 +49,81 @@ export const createIcecreamHandler = async (req: Request, res: Response) => {
     } else {
       newIcecream.index = previousIcecream[0].index + 1;
     }
-  } catch {
-    res.status(500).send("error");
+  } catch (err: any) {
+    logger.error(err);
+    return res.status(500).send(err.message);
   }
 
   try {
-    const savedIcecream = await newIcecream.save();
-    res.status(201).json(savedIcecream);
-  } catch (err) {
-    res.status(500).json(err);
+    const icecream = await createIcecream(newIcecream);
+    return res.status(201).json(icecream);
+  } catch (err: any) {
+    logger.error(err);
+    return res.status(409).send(err.message);
   }
 };
 
-export const getIcecreamHandler = async (req: Request, res: Response) => {
+export const getIcecreamHandler = async (
+  req: Request<getIcecreamInput["params"]>,
+  res: Response
+) => {
   const { index } = req.params;
 
   try {
-    const icecream = await Icecream.findOne({ index });
+    const icecream = await getIcecreamByIndex(index);
     if (!icecream) return res.status(404).json({ error: "icecream not found" });
 
-    res.status(200).json(icecream);
+    return res.status(200).json(icecream);
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 };
 
-export const updateIcecreamHandler = async (req: Request, res: Response) => {
+export const updateIcecreamHandler = async (
+  req: Request<updateIcecreamInput["params"], {}, updateIcecreamInput["body"]>,
+  res: Response
+) => {
   const { index } = req.params;
-  const data = req.body;
+  const data: icecreamType = bodySerializer(req.body);
 
   try {
-    const icecream = await Icecream.findOneAndUpdate({ index }, data, {
-      new: true,
-    });
+    const icecream = await updateIcecream(index, data);
 
     if (!icecream) return res.status(404).json({ error: "icecream not found" });
 
-    res.status(200).json(icecream);
+    return res.status(200).json(icecream);
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 };
 
-export const deleteIcecreamHandler = async (req: Request, res: Response) => {
+export const deleteIcecreamHandler = async (
+  req: Request<deleteIcecreamInput["params"]>,
+  res: Response
+) => {
   const { index } = req.params;
 
   try {
-    const icecream = await Icecream.findOneAndDelete({ index });
+    const icecream = await deleteIcecream(index);
     if (!icecream) return res.status(404).json({ error: "icecream not found" });
 
-    res.sendStatus(200);
+    return res.sendStatus(200);
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 };
 
-export const searchIcecreamHandler = async (req: any, res: Response) => {
+export const searchIcecreamHandler = async (
+  req: Request<{}, {}, {}, searchIcecreamInput["query"]>,
+  res: Response
+) => {
   const limit = (req.query.limit as unknown as number) || 0;
-
-  const searchTerm: string = req.query.query || req.query.q;
-  const brand: string = req.query.brand?.toLowerCase();
-
-  let minRating = req.query.minRating;
-  if (minRating) minRating = parseFloat(minRating);
-
-  let maxRating = req.query.maxRating;
-  if (maxRating) maxRating = parseFloat(maxRating);
-
-  let ingredients: string[] = req.query.ingredients?.split(",");
-  ingredients = ingredients?.map((ingredient) => {
-    return ingredient.toUpperCase();
-  });
-
-  //building the query
-  let query = {};
-
-  if (brand) {
-    query = {
-      ...query,
-      brand: brand,
-    };
-  }
-
-  if (ingredients?.length > 0) {
-    query = {
-      ...query,
-      ingredients: { $all: ingredients },
-    };
-  }
-
-  if (minRating || maxRating) {
-    query = {
-      ...query,
-      rating: { $gte: minRating || 0, $lte: maxRating || 5 },
-    };
-  }
-
-  if (searchTerm) {
-    query = {
-      ...query,
-      $or: [
-        { name: { $regex: searchTerm, $options: "ie" } },
-        { subhead: { $regex: searchTerm, $options: "ie" } },
-        { description: { $regex: searchTerm, $options: "ie" } },
-      ],
-    };
-  }
-
-  // res.json(query);
+  const query = searchQueryBuilder(req.query);
 
   try {
-    const icecream = await Icecream.find(query).limit(limit);
-    res.status(200).json(icecream);
+    const icecream = await searchIcecream(query, limit);
+    return res.status(200).json(icecream);
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 };

@@ -1,5 +1,5 @@
-export interface icecreamType {
-  index: number;
+export default interface icecreamType {
+  index?: number;
   name: string;
   brand?: string;
   subhead?: string | null;
