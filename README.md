@@ -7,11 +7,12 @@
 - ~~limit~~, use pagination, include prev attribute
 - ~~query params: ?brand, ?rating, ?ingredients ?name~~, add regex to ingredients search?
 - ~~create index from all the search types~~, create compound index for $or: [name, subhead, desc]
+- ~~refactor~~
 - redis
 - testing
-- graphql
-- write docs using swagger
+- write docs w swagger
 
 ### Later
 
 - rate limit
+- graphql
