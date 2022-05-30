@@ -5,6 +5,5 @@ module.exports = {
   testMatch: ["**/**/*.test.ts"],
   verbose: true,
   forceExit: true,
-  // clearMock: true,
   detectOpenHandles: true,
 };
