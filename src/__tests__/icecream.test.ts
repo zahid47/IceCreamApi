@@ -2,7 +2,7 @@ import request from "supertest";
 import app from "../utils/app";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import { createIcecream } from "../service/icecream.service";
+import { icecreamService } from "../service/icecream.service";
 import Icecream from "../model/icecream.model";
 
 describe("icecream", () => {
@@ -24,9 +24,18 @@ describe("icecream", () => {
   describe("GET /api/v1/icecreams", () => {
     describe("given the icecreams exist", () => {
       it("should return a 200 and '<=limit' number of icecreams", async () => {
-        await createIcecream({ index: 99999, name: "test icecream 1" });
-        await createIcecream({ index: 99998, name: "test icecream 2" });
-        await createIcecream({ index: 99997, name: "test icecream 3" });
+        await icecreamService.createIcecream({
+          index: 99999,
+          name: "test icecream 1",
+        });
+        await icecreamService.createIcecream({
+          index: 99998,
+          name: "test icecream 2",
+        });
+        await icecreamService.createIcecream({
+          index: 99997,
+          name: "test icecream 3",
+        });
 
         const limit = 2;
         const { statusCode, body } = await request(app).get(
@@ -50,7 +59,7 @@ describe("icecream", () => {
   describe("GET /api/v1/icecreams", () => {
     describe("given an icecream does exist with that index", () => {
       it("should return a 200", async () => {
-        const icecream = await createIcecream({
+        const icecream = await icecreamService.createIcecream({
           index: 0,
           name: "test icecream",
         });
@@ -93,7 +102,10 @@ describe("icecream", () => {
     describe("given the icecream exist", () => {
       it("should return a 200 and updated icecream", async () => {
         const index = 99999;
-        await createIcecream({ index: index, name: "test icecream" });
+        await icecreamService.createIcecream({
+          index: index,
+          name: "test icecream",
+        });
 
         const updatedName = "updated icecream";
         const { statusCode, body } = await request(app)
@@ -110,7 +122,10 @@ describe("icecream", () => {
     describe("given the icecream exist", () => {
       it("should return a 200 and delete the icecream", async () => {
         const index = 99999;
-        await createIcecream({ index: index, name: "test icecream" });
+        await icecreamService.createIcecream({
+          index: index,
+          name: "test icecream",
+        });
 
         const { statusCode } = await request(app).delete(
           `/api/v1/icecreams/${index}`
@@ -125,7 +140,7 @@ describe("icecream", () => {
   describe("POST /api/v1/icecreams/search", () => {
     describe("given the icecreams exist", () => {
       it("should return a 200 and 2 icecreams", async () => {
-        await createIcecream({
+        await icecreamService.createIcecream({
           index: 99999,
           name: "good icecream 1",
           rating: 5,
@@ -134,7 +149,7 @@ describe("icecream", () => {
           description: "tasty",
           ingredients: ["MILK", "BUTTER", "NUTS"],
         });
-        await createIcecream({
+        await icecreamService.createIcecream({
           index: 99998,
           name: "mid icecream 2",
           rating: 3,
@@ -143,7 +158,7 @@ describe("icecream", () => {
           description: "meh",
           ingredients: ["BERRIES", "MILK", "LEMON", "WATER"],
         });
-        await createIcecream({
+        await icecreamService.createIcecream({
           index: 99997,
           name: "bad icecream 3",
           rating: 1,
@@ -162,7 +177,6 @@ describe("icecream", () => {
             ingredients: "lemon",
           });
 
-        console.log(body);
         expect(statusCode).toBe(200);
         expect(body.length).toEqual(2);
       });

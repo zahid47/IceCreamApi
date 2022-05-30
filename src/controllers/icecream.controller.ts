@@ -8,20 +8,13 @@ import {
   searchIcecreamInput,
   updateIcecreamInput,
 } from "../schema/icecream.schema";
-import {
-  createIcecream,
-  deleteIcecream,
-  getIcecreamByIndex,
-  getIcecreams,
-  searchIcecream,
-  updateIcecream,
-} from "../service/icecream.service";
+import { icecreamService } from "../service/icecream.service";
 import icecreamType from "../types/icecreamType";
 import bodySerializer from "../utils/bodySerializer";
 import logger from "../utils/logger";
 import { searchQueryBuilder } from "../utils/searchQueryBuilder";
 
-export const getIcecreamsHandler = async (
+const getIcecreamsHandler = async (
   req: Request<{}, {}, {}, getIcecreamsInput["query"]>,
   res: Response
 ) => {
@@ -31,14 +24,14 @@ export const getIcecreamsHandler = async (
   }
 
   try {
-    const icecreams = await getIcecreams(limit);
+    const icecreams = await icecreamService.getIcecreams(limit);
     return res.status(200).json(icecreams);
   } catch (err) {
     return res.status(500).json(err);
   }
 };
 
-export const createIcecreamHandler = async (
+const createIcecreamHandler = async (
   req: Request<{}, {}, createIcecreamInput["body"]>,
   res: Response
 ) => {
@@ -58,7 +51,7 @@ export const createIcecreamHandler = async (
   }
 
   try {
-    const icecream = await createIcecream(newIcecream);
+    const icecream = await icecreamService.createIcecream(newIcecream);
     return res.status(201).json(icecream);
   } catch (err: any) {
     logger.error(err);
@@ -66,14 +59,14 @@ export const createIcecreamHandler = async (
   }
 };
 
-export const getIcecreamHandler = async (
+const getIcecreamHandler = async (
   req: Request<getIcecreamInput["params"]>,
   res: Response
 ) => {
   const { index } = req.params;
 
   try {
-    const icecream = await getIcecreamByIndex(index);
+    const icecream = await icecreamService.getIcecreamByIndex(index);
     if (!icecream) return res.status(404).json({ error: "icecream not found" });
 
     return res.status(200).json(icecream);
@@ -82,7 +75,7 @@ export const getIcecreamHandler = async (
   }
 };
 
-export const updateIcecreamHandler = async (
+const updateIcecreamHandler = async (
   req: Request<updateIcecreamInput["params"], {}, updateIcecreamInput["body"]>,
   res: Response
 ) => {
@@ -90,7 +83,7 @@ export const updateIcecreamHandler = async (
   const data: icecreamType = bodySerializer(req.body);
 
   try {
-    const icecream = await updateIcecream(index, data);
+    const icecream = await icecreamService.updateIcecreamByIndex(index, data);
 
     if (!icecream) return res.status(404).json({ error: "icecream not found" });
 
@@ -100,14 +93,14 @@ export const updateIcecreamHandler = async (
   }
 };
 
-export const deleteIcecreamHandler = async (
+const deleteIcecreamHandler = async (
   req: Request<deleteIcecreamInput["params"]>,
   res: Response
 ) => {
   const { index } = req.params;
 
   try {
-    const icecream = await deleteIcecream(index);
+    const icecream = await icecreamService.deleteIcecreamByIndex(index);
     if (!icecream) return res.status(404).json({ error: "icecream not found" });
 
     return res.sendStatus(200);
@@ -116,7 +109,7 @@ export const deleteIcecreamHandler = async (
   }
 };
 
-export const searchIcecreamHandler = async (
+const searchIcecreamHandler = async (
   req: Request<{}, {}, {}, searchIcecreamInput["query"]>,
   res: Response
 ) => {
@@ -127,9 +120,18 @@ export const searchIcecreamHandler = async (
   const query = searchQueryBuilder(req.query);
 
   try {
-    const icecream = await searchIcecream(query, limit);
+    const icecream = await icecreamService.searchIcecream(query, limit);
     return res.status(200).json(icecream);
   } catch (err) {
     return res.status(500).json(err);
   }
+};
+
+export const icecreamController = {
+  getIcecreamsHandler,
+  createIcecreamHandler,
+  getIcecreamHandler,
+  updateIcecreamHandler,
+  deleteIcecreamHandler,
+  searchIcecreamHandler,
 };

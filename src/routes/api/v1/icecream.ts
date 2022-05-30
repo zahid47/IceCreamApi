@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import validateResource from "../../../middleware/validateResource";
 import {
   createIcecreamSchema,
@@ -8,81 +8,41 @@ import {
   updateIcecreamSchema,
   deleteIcecreamSchema,
 } from "../../../schema/icecream.schema";
-import {
-  getIcecreamsHandler,
-  createIcecreamHandler,
-  getIcecreamHandler,
-  updateIcecreamHandler,
-  deleteIcecreamHandler,
-  searchIcecreamHandler,
-} from "../../../controllers/icecream.controller";
+import { icecreamController } from "../../../controllers/icecream.controller";
 
 const router = Router();
 
-// @route  GET api/v1/icecreams/search
-// @desc   get icecream by search
-// @access public
-router.get(
-  "/search",
-  validateResource(searchIcecreamSchema),
-  (req: Request, res: Response) => {
-    searchIcecreamHandler(req, res);
-  }
-);
+router
+  .route("/search")
+  .get(
+    validateResource(searchIcecreamSchema),
+    icecreamController.searchIcecreamHandler
+  );
 
-// @route  GET api/v1/icecreams
-// @desc   get all icecreams
-// @access public
-router.get(
-  "/",
-  validateResource(getIcecreamsSchema),
-  (req: Request, res: Response) => {
-    getIcecreamsHandler(req, res);
-  }
-);
+router
+  .route("/")
+  .get(
+    validateResource(getIcecreamsSchema),
+    icecreamController.getIcecreamsHandler
+  )
+  .post(
+    validateResource(createIcecreamSchema),
+    icecreamController.createIcecreamHandler
+  );
 
-// @route  POST api/v1/icecreams/index
-// @desc   create icecream
-// @access public
-router.post(
-  "/",
-  validateResource(createIcecreamSchema),
-  (req: Request, res: Response) => {
-    createIcecreamHandler(req, res);
-  }
-);
-
-// @route  GET api/v1/icecreams/index
-// @desc   get icecream by index
-// @access public
-router.get(
-  "/:index",
-  validateResource(getIcecreamSchema),
-  (req: Request, res: Response) => {
-    getIcecreamHandler(req, res);
-  }
-);
-
-// @route  PUT api/v1/icecreams/index
-// @desc   update icecream by index
-// @access public
-router.put(
-  "/:index",
-  validateResource(updateIcecreamSchema),
-  (req: Request, res: Response) => {
-    updateIcecreamHandler(req, res);
-  }
-);
-
-// @route  DELETE api/v1/icecreams/index
-// @desc   get icecream by index
-// @access public
-router.delete(
-  "/:index",
-  validateResource(deleteIcecreamSchema),
-  (req: Request, res: Response) => {
-    deleteIcecreamHandler(req, res);
-  }
-);
+router
+  .route("/:index")
+  .get(
+    validateResource(getIcecreamSchema),
+    icecreamController.getIcecreamHandler
+  )
+  .put(
+    validateResource(updateIcecreamSchema),
+    icecreamController.updateIcecreamHandler
+  )
+  .delete(
+    validateResource(deleteIcecreamSchema),
+    icecreamController.deleteIcecreamHandler
+  );
 
 export default router;
