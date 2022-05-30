@@ -4,7 +4,7 @@ const bodySerializer = (body: any) => {
     return ingredient.trim().toUpperCase();
   });
 
-  let serializedBody: any = {
+  const serializedBody: any = {
     name: body.name,
     brand: body.brand,
     subhead: body.subhead,
