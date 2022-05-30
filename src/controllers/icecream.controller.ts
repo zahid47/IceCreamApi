@@ -25,7 +25,6 @@ export const getIcecreamsHandler = async (
   req: Request<{}, {}, {}, getIcecreamsInput["query"]>,
   res: Response
 ) => {
-  
   let limit = 0;
   if (req.query.limit) {
     limit = parseInt(req.query.limit);
@@ -48,7 +47,7 @@ export const createIcecreamHandler = async (
   try {
     const previousIcecream = await Icecream.find().sort({ _id: -1 }).limit(1);
 
-    if (!previousIcecream) {
+    if (previousIcecream.length < 1) {
       newIcecream.index = 0;
     } else {
       newIcecream.index = previousIcecream[0].index + 1;
@@ -121,7 +120,10 @@ export const searchIcecreamHandler = async (
   req: Request<{}, {}, {}, searchIcecreamInput["query"]>,
   res: Response
 ) => {
-  const limit = (req.query.limit as unknown as number) || 0;
+  let limit = 0;
+  if (req.query.limit) {
+    limit = parseInt(req.query.limit);
+  }
   const query = searchQueryBuilder(req.query);
 
   try {
