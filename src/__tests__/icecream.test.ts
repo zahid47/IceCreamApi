@@ -12,7 +12,7 @@ describe("icecream", () => {
   });
 
   beforeEach(async () => {
-    Icecream.deleteMany({});
+    await Icecream.deleteMany({});
   });
 
   afterAll(async () => {
@@ -24,18 +24,9 @@ describe("icecream", () => {
   describe("GET /api/v1/icecreams", () => {
     describe("given the icecreams exist", () => {
       it("should return a 200 and '<=limit' number of icecreams", async () => {
-        await createIcecream({
-          index: Math.floor(Math.random() * 9999999),
-          name: "test icecream 1",
-        });
-        await createIcecream({
-          index: Math.floor(Math.random() * 9999999),
-          name: "test icecream 2",
-        });
-        await createIcecream({
-          index: Math.floor(Math.random() * 9999999),
-          name: "test icecream 3",
-        });
+        await createIcecream({ index: 99999, name: "test icecream 1" });
+        await createIcecream({ index: 99998, name: "test icecream 2" });
+        await createIcecream({ index: 99997, name: "test icecream 3" });
 
         const limit = 2;
         const { statusCode, body } = await request(app).get(
@@ -101,7 +92,7 @@ describe("icecream", () => {
   describe("PUT /api/v1/icecreams/:index", () => {
     describe("given the icecream exist", () => {
       it("should return a 200 and updated icecream", async () => {
-        const index = Math.floor(Math.random() * 9999999);
+        const index = 99999;
         await createIcecream({ index: index, name: "test icecream" });
 
         const updatedName = "updated icecream";
@@ -118,7 +109,7 @@ describe("icecream", () => {
   describe("DELETE /api/v1/icecreams/:index", () => {
     describe("given the icecream exist", () => {
       it("should return a 200 and delete the icecream", async () => {
-        const index = Math.floor(Math.random() * 9999999);
+        const index = 99999;
         await createIcecream({ index: index, name: "test icecream" });
 
         const { statusCode } = await request(app).delete(
@@ -135,7 +126,7 @@ describe("icecream", () => {
     describe("given the icecreams exist", () => {
       it("should return a 200 and 2 icecreams", async () => {
         await createIcecream({
-          index: Math.floor(Math.random() * 9999999),
+          index: 99999,
           name: "good icecream 1",
           rating: 5,
           brand: "joe",
@@ -144,7 +135,7 @@ describe("icecream", () => {
           ingredients: ["MILK", "BUTTER", "NUTS"],
         });
         await createIcecream({
-          index: Math.floor(Math.random() * 9999999),
+          index: 99998,
           name: "mid icecream 2",
           rating: 3,
           brand: "dragon",
@@ -153,7 +144,7 @@ describe("icecream", () => {
           ingredients: ["BERRIES", "MILK", "LEMON", "WATER"],
         });
         await createIcecream({
-          index: Math.floor(Math.random() * 9999999),
+          index: 99997,
           name: "bad icecream 3",
           rating: 1,
           brand: "dragon",
