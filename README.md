@@ -89,11 +89,11 @@ Run Tests
 - [x] refactor
 - [x] testing
 - [x] write docs w swagger (incomplete but im done coz boring)
-- [] use pagination, include prev attribute
-- [] add regex to ingredients search (when searching for "milk", entries with "soy milk" should resolve as well)???
-- [] create compound index for $or: [name, subhead, desc] (mongodb)
-- [] rate limit
-- [] graphql
+- [ ] use pagination, include prev attribute
+- [ ] add regex to ingredients search (when searching for "milk", entries with "soy milk" should resolve as well)???
+- [ ] create compound index for $or: [name, subhead, desc] (mongodb)
+- [ ] rate limit
+- [ ] graphql
 
 <!-- Contact -->
 
