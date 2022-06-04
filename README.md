@@ -11,7 +11,6 @@
 - ~~refactor~~
 - ~~testing~~
 - write docs w swagger
-- husky
 
 ### Later
 
