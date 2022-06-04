@@ -11,6 +11,17 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+/**
+ * @openapi
+ * /:
+ *  get:
+ *     tags:
+ *     - Healthcheck
+ *     description: Responds if the app is up and running
+ *     responses:
+ *       200:
+ *         description: App is up and running
+ */
 app.get("/", (_req: Request, res: Response) => {
   return res.status(200).json({
     name: "Ice Cream API",

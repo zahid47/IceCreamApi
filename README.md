@@ -10,7 +10,7 @@
 - ~~create index from all the search types~~
 - ~~refactor~~
 - ~~testing~~
-- write docs w swagger
+- ~~write docs w swagger~~ (incomplete but im done coz boring)
 
 ### Later
 

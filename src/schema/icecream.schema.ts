@@ -1,5 +1,32 @@
 import { object, string, TypeOf, any } from "zod";
-
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     CreateIcecreamsInput:
+ *       type: object
+ *       required:
+ *         - name
+ *       properties:
+ *         brand:
+ *           type: string
+ *           default: "bj"
+ *         name:
+ *           type: string
+ *           default: "Salted Caramel Core"
+ *         subhead:
+ *           type: string
+ *           default: "Sweet Cream Ice Cream with Blonde Brownies & a Salted Caramel Core"
+ *         description:
+ *           type: string
+ *           default: "Find your way to the ultimate ice cream experience with our Cores."
+ *         rating:
+ *           type: string
+ *           default: "3.7"
+ *         ingredients:
+ *           type: string
+ *           default: "milk, soy, water, nuts, caramel"
+ */
 export const createIcecreamSchema = object({
   body: object({
     index: any({
@@ -16,6 +43,34 @@ export const createIcecreamSchema = object({
   }),
 });
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *    GetIcecreamsResponse:
+ *      type: array
+ *      items:
+ *        type: object
+ *        properties:
+ *          _id:
+ *            type: string
+ *          index:
+ *            type: integer
+ *          brand:
+ *            type: string
+ *          name:
+ *            type: string
+ *          subhead:
+ *            type: string
+ *          description:
+ *            type: string
+ *          rating:
+ *            type: number
+ *          ingredients:
+ *            type: array
+ *            items:
+ *              type: string
+ */
 export const getIcecreamsSchema = object({
   query: object({
     limit: string().optional(),
