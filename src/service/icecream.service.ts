@@ -41,9 +41,9 @@ const deleteIcecreamByIndex = async (index: number) => {
   }
 };
 
-const searchIcecream = async (query: object, limit: number) => {
+const searchIcecream = async (query: object, limit: number, skip: number) => {
   try {
-    return await Icecream.find(query).limit(limit);
+    return await Icecream.find(query).limit(limit).skip(skip);
   } catch (err: any) {
     throw new Error(err);
   }

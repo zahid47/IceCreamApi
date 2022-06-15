@@ -106,6 +106,7 @@ export const deleteIcecreamSchema = object({
 export const searchIcecreamSchema = object({
   query: object({
     limit: string().optional(),
+    page: string().optional(),
     searchTerm: string().optional(),
     brand: string().optional(),
     minRating: string().optional(),

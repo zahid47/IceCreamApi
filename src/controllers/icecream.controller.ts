@@ -18,7 +18,7 @@ const getIcecreamsHandler = async (
   req: Request<{}, {}, {}, getIcecreamsInput["query"]>,
   res: Response
 ) => {
-  let limit = 0;
+  let limit = 10; //default limit 10
   if (req.query.limit) {
     limit = parseInt(req.query.limit);
   }
@@ -113,14 +113,19 @@ const searchIcecreamHandler = async (
   req: Request<{}, {}, {}, searchIcecreamInput["query"]>,
   res: Response
 ) => {
-  let limit = 0;
+  let limit = 10; //default limit 10
   if (req.query.limit) {
     limit = parseInt(req.query.limit);
+  }
+
+  let skip = 0; //default skip 0
+  if (req.query.page) {
+    skip = limit * (parseInt(req.query.page) - 1);
   }
   const query = searchQueryBuilder(req.query);
 
   try {
-    const icecream = await icecreamService.searchIcecream(query, limit);
+    const icecream = await icecreamService.searchIcecream(query, limit, skip);
     return res.status(200).json(icecream);
   } catch (err) {
     return res.status(500).json(err);
